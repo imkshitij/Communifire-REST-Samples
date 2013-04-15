@@ -12,7 +12,7 @@ namespace Communifire.RestApiSamples
 {
     public class RankSample
     {
-        #region Rank Related// changes are done here
+        #region Rank Related
         public static void AddRank()
         {
             try
