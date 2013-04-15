@@ -10,6 +10,7 @@ using System.Xml;
 
 namespace Communifire.RestApiSamples
 {
+
     class ArticleSample
     {
         #region Article Related
@@ -96,9 +97,7 @@ namespace Communifire.RestApiSamples
         {
             try
             {
-                //Add a new space using the REST API in Communifire
-                //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
-                string postData = "<ArticleDTO><ArticleBody>This artcle is updated from the WCF.</ArticleBody><ArticleID>53</ArticleID><UserID>1</UserID></ArticleDTO>";
+                string postData = "<ArticleDTO><ArticleID>145</ArticleID><Headline>Headline via REST</Headline><UpdatedArticleBody>This artcle is updated from the WCF.</UpdatedArticleBody></ArticleDTO>";
                 //set the RESTful URL
                 string serviceUrl = string.Format("{0}articleservice.svc/articles/article", Program.ROOT_URL);
 
@@ -123,7 +122,6 @@ namespace Communifire.RestApiSamples
                     {
                         using (var reader = new StreamReader(response.GetResponseStream()))
                         {
-
                             //read the results string
                             string result = reader.ReadToEnd();
                             //check the results assuming XML is returned: note for JSON: use JSON stringfy
