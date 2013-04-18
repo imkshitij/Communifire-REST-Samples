@@ -22,9 +22,7 @@ namespace Communifire.RestApiSamples
         {
             try
             {
-                //Add a new space using the REST API in Communifire
-                //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
-                string postData = "<ArticleDTO><ArticleBody>This artcle is added from the WCF Service.</ArticleBody><CategoryID>1</CategoryID><Headline>New Rest API WCF Article</Headline><MetaTitle>Article Meta Title</MetaTitle><SEOName>new-rest-api-wcf-article</SEOName><UserID>1</UserID></ArticleDTO>";
+                string postData = "<ArticleDTO><ArticleBody>This artcle is added from the WCF Service.</ArticleBody><CategoryID>1</CategoryID><Headline>New Rest API WCF Article</Headline></ArticleDTO>";
                 //string postData = string.Format("<ArticleDTO><AnonymousComments>false</AnonymousComments><ArticleBody>{0}</ArticleBody><ArticleImage></ArticleImage><ArticleStatusID>1</ArticleStatusID><ArticleURL></ArticleURL><Author></Author><AvatarPath></AvatarPath><CategoryID>1</CategoryID><Headline>{1}</Headline><IsFeatured>{2}</IsFeatured><IsLatest>false</IsLatest><IsPrivateSpace>false</IsPrivateSpace><IsPublishedFromDelayedPublishingMode>false</IsPublishedFromDelayedPublishingMode><IsPublishedFromDraftMode>false</IsPublishedFromDraftMode><LicenseID>0</LicenseID><MediaServerID>1</MediaServerID><MetaDescription>Article Meta Description</MetaDescription><MetaKeywords>Article Meta Keywords</MetaKeywords><MetaTitle>Article Meta Title</MetaTitle><SEOName>{3}</SEOName><SpaceID>0</SpaceID><StatusID>1</StatusID><Summary>test-rest-api-artcile</Summary><TagName>a,b,c</TagName><UserID>{4}</UserID></ArticleDTO>", artilceBody, headline, isfeatured, articlestub, userID);
                 //set the RESTful URL
                 string serviceUrl = string.Format("{0}articleservice.svc/articles/article", Program.ROOT_URL);
@@ -97,7 +95,7 @@ namespace Communifire.RestApiSamples
         {
             try
             {
-                string postData = "<ArticleDTO><ArticleID>145</ArticleID><Headline>Headline via REST</Headline><UpdatedArticleBody>This artcle is updated from the WCF.</UpdatedArticleBody></ArticleDTO>";
+                string postData = "<ArticleDTO><ArticleID>36</ArticleID><Headline>Headline</Headline><UpdatedArticleBody>This artcle is updated from the WCF.</UpdatedArticleBody></ArticleDTO>";
                 //set the RESTful URL
                 string serviceUrl = string.Format("{0}articleservice.svc/articles/article", Program.ROOT_URL);
 
@@ -161,9 +159,7 @@ namespace Communifire.RestApiSamples
         #endregion
 
         #region Delete Article
-        /// <summary>
-        /// Adds the article.
-        /// </summary>
+
         public static void DeleteArticle(int articleID)
         {
             try
@@ -230,9 +226,7 @@ namespace Communifire.RestApiSamples
         #endregion
         
         #region Get Article
-        /// <summary>
-        /// Adds the article.
-        /// </summary>
+
         public static void GetArticle(int articleID)
         {
             try
@@ -486,12 +480,13 @@ namespace Communifire.RestApiSamples
         /// <summary>
         /// Get All Articles
         /// </summary>
-        public static void GetAllArticle()
+        public static void GetArticles()
         {
             try
             {
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}articleservice.svc/articles/articles", Program.ROOT_URL);
+                string query = "?spaceID=0&userID=1&status=1";
+                string serviceUrl = string.Format("{0}articleservice.svc/articles", Program.ROOT_URL);
+                serviceUrl = string.Format("{0}{1}", serviceUrl, query);
 
                 //create a new HttpRequest
                 var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
@@ -544,6 +539,69 @@ namespace Communifire.RestApiSamples
             }
         }
         #endregion
+
+        //#region Get All Articles
+        ///// <summary>
+        ///// Get All Articles
+        ///// </summary>
+        //public static void GetAllArticle()
+        //{
+        //    try
+        //    {
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}articleservice.svc/articles/articles", Program.ROOT_URL);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "GET";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //}
+        //#endregion
 
         #region Update Publish Status
         /// <summary>
@@ -1098,9 +1156,7 @@ namespace Communifire.RestApiSamples
         {
             try
             {
-                //Add a new space using the REST API in Communifire
-                //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
-                string postData = "<CategoryDTO><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Default Rest API Article Category</CategoryName><Headline>Default Rest API Article Category</Headline><MetaDescription>article</MetaDescription>Default Rest API Article Category<MetaKeywords>test article</MetaKeywords><MetaTitle>Article Meta Title</MetaTitle><ParentID>0</ParentID><ParentName></ParentName><SEOName>Default-Rest-API-Article-Category</SEOName><SpaceID>0</SpaceID></CategoryDTO>";
+                string postData = "<CategoryDTO><ActiveStatus>1</ActiveStatus><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Rest API Article Category</CategoryName><Headline>Default Rest API Article Category</Headline><SEOName>Default-Rest-API-Article-Category</SEOName><SpaceID>0</SpaceID></CategoryDTO>";
                 //set the RESTful URL
                 string serviceUrl = string.Format("{0}articleservice.svc/articles/category", Program.ROOT_URL);
 
@@ -1172,9 +1228,7 @@ namespace Communifire.RestApiSamples
         {
             try
             {
-                //Add a new space using the REST API in Communifire
-                //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
-                string postData = string.Format("<CategoryDTO><ActiveStatus>1</ActiveStatus><CategoryDescription>test rest api upadte article category</CategoryDescription><CategoryID>{0}</CategoryID><CategoryName>Default Rest API Update Article Category</CategoryName><Headline>Default Rest API Article Category</Headline><MetaDescription>article</MetaDescription>Default Rest API Article Category<MetaKeywords>test article</MetaKeywords><MetaTitle>Article Meta Title</MetaTitle><ParentID>0</ParentID><ParentName></ParentName><SEOName>Default-Rest-API-Article-Category</SEOName><SpaceID>0</SpaceID></CategoryDTO>",categoryID);
+                string postData = string.Format("<CategoryDTO><ActiveStatus>1</ActiveStatus><CategoryDescription>test rest api article category</CategoryDescription><CategoryID>{0}</CategoryID><CategoryName>Rest API Article Category</CategoryName><Headline>Default Rest API Article Category</Headline><SEOName>Default-Rest-API-Article-Category</SEOName><SpaceID>0</SpaceID></CategoryDTO>", categoryID);
                 //set the RESTful URL
                 string serviceUrl = string.Format("{0}articleservice.svc/articles/category", Program.ROOT_URL);
 
@@ -1329,9 +1383,9 @@ namespace Communifire.RestApiSamples
                 //add the API key
                 myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
                 //add the data to be posted in the request stream
-                var requestStream = myRequest.GetRequestStream();
+                //var requestStream = myRequest.GetRequestStream();
                 //requestStream.Write(data, 0, data.Length);
-                requestStream.Close();
+                //requestStream.Close();
 
                 //post the request and get the response details
                 using (var response = myRequest.GetResponse())
