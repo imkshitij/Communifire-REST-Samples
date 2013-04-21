@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="ArticleSample.cs" />
     <Compile Include="BlogSample.cs" />
+    <Compile Include="CommonSample.cs" />
     <Compile Include="IssueTrackerSample.cs" />
     <Compile Include="DataLoadHelper.cs" />
     <Compile Include="EventSample.cs" />
