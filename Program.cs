@@ -13,13 +13,14 @@ namespace Communifire.RestApiSamples
 {
     class Program
     {
-        public static readonly string ROOT_URL = "http://star.communifire.com/services/";//http://localhost:499/
+        public static readonly string ROOT_URL = "http://cftesting.com/services/";//http://localhost:499/
         public static readonly string API_KEY = "YWRtaW46YzdkZmE4MDgtNTAxNi00YjU5LTk1ZGItYzA4ZWU4Zjk5Njgz";
             //"YWRtaW46MjNjYTQ1NzktYWI2YS00MjEwLTgyNjUtZGNkZjFkYTA1Y2Vi";
 
         static void Main(string[] args)
         {
-            UserServiceSample.CreateCase(1, "Star REST Issue", "Star REST Issue");
+            BlogSample.UpdateBlogEntry();
+            //UserServiceSample.CreateCase(1, "Star REST Issue", "Star REST Issue");
             #region Space Related
            
             //SpaceProgram.UnjoinUser(13, 1);

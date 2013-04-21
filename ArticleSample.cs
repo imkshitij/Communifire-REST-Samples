@@ -286,68 +286,68 @@ namespace Communifire.RestApiSamples
         }
         #endregion
 
-        #region Article Stub Availability
-        /// <summary>
-        /// Article Stub Availability
-        /// </summary>
-        public static void ArticleStubAvailability(int spaceID, string articleStub)
-        {
-            try
-            {
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}articleservice.svc/articles/availability?spaceID={1}&stub={2}", Program.ROOT_URL, spaceID, articleStub);
+        //#region Article Stub Availability
+        ///// <summary>
+        ///// Article Stub Availability
+        ///// </summary>
+        //public static void ArticleStubAvailability(int spaceID, string articleStub)
+        //{
+        //    try
+        //    {
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}articleservice.svc/articles/availability?spaceID={1}&stub={2}", Program.ROOT_URL, spaceID, articleStub);
 
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "GET";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "GET";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
 
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
 
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
 
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-        }
-        #endregion
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //}
+        //#endregion
 
         #region Set Article Status
         /// <summary>

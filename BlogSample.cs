@@ -14,940 +14,940 @@ namespace Communifire.RestApiSamples
 {
     public class BlogSample
     {
-        #region Blog Related
-
-        #region CRUD Blog Methods
-
-        public static void CreateBlog()
-        {
-            try
-            {
-                //Add a new space using the REST API in Communifire
-                //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
-                string postData = "<BlogDTO><BlogName>Blog Name</BlogName><Intro>Blog Intro</Intro><UserID>1</UserID></BlogDTO>";
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs", Program.ROOT_URL);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "POST";
-                //set the content header type. Note: use "application/json" for JSON
-                myRequest.ContentType = "application/xml";
-                byte[] data = Encoding.UTF8.GetBytes(postData);
-                myRequest.ContentLength = data.Length;
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-                //add the data to be posted in the request stream
-                var requestStream = myRequest.GetRequestStream();
-                requestStream.Write(data, 0, data.Length);
-                requestStream.Close();
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-
-        public static void UpdateBlog()
-        {
-            try
-            {
-                //Add a new space using the REST API in Communifire
-                //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
-                string postData = "<BlogDTO><BlogName>Blog Name</BlogName><Intro>Blog Intro</Intro><UserID>1</UserID></BlogDTO><BlogID>36</BlogID";
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs", Program.ROOT_URL);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "PUT";
-                //set the content header type. Note: use "application/json" for JSON
-                myRequest.ContentType = "application/xml";
-                byte[] data = Encoding.UTF8.GetBytes(postData);
-                myRequest.ContentLength = data.Length;
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-                //add the data to be posted in the request stream
-                var requestStream = myRequest.GetRequestStream();
-                requestStream.Write(data, 0, data.Length);
-                requestStream.Close();
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-
-        public static void DeleteBlog(int blogID)
-        {
-            try
-            {
-                //Deletes a community user using the REST API based on user ID
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/{1}", Program.ROOT_URL, 1);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "DELETE";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-
-        public static void AssignBlogAuthor(int blogID, int userID)
-        {
-            try
-            {
-                //Add a new space using the REST API in Communifire
-                //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
-                string postData = "<CategoryDTO><ActiveStatus>1</ActiveStatus><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Default Rest API Article Category</CategoryName><Headline>Default Rest API Article Category</Headline><MetaDescription>article</MetaDescription>Default Rest API Article Category<MetaKeywords>test article</MetaKeywords><MetaTitle>Article Meta Title</MetaTitle><ParentID>0</ParentID><ParentName></ParentName><SEOName>Default-Rest-API-Article-Category</SEOName><SpaceID>0</SpaceID></CategoryDTO>";
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/assignauthor?userID={1}&blogID={2}", Program.ROOT_URL, 1, 1);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "PUT";
-                //set the content header type. Note: use "application/json" for JSON
-                myRequest.ContentType = "application/xml";
-                byte[] data = Encoding.UTF8.GetBytes(postData);
-                myRequest.ContentLength = data.Length;
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-                //add the data to be posted in the request stream
-                var requestStream = myRequest.GetRequestStream();
-                requestStream.Write(data, 0, data.Length);
-                requestStream.Close();
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-
-        public static void DeleteBlogAuthors(int blogID)
-        {
-            try
-            {
-                //Deletes a community user using the REST API based on user ID
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/deleteauthor/{1}", Program.ROOT_URL, 1);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "DELETE";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-
-        public static void SetBlogWorkflowStatus(bool status, int workflowID)
-        {
-            try
-            {
-                //Add a new space using the REST API in Communifire
-                //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
-                string postData = "<CategoryDTO><ActiveStatus>1</ActiveStatus><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Default Rest API Article Category</CategoryName><Headline>Default Rest API Article Category</Headline><MetaDescription>article</MetaDescription>Default Rest API Article Category<MetaKeywords>test article</MetaKeywords><MetaTitle>Article Meta Title</MetaTitle><ParentID>0</ParentID><ParentName></ParentName><SEOName>Default-Rest-API-Article-Category</SEOName><SpaceID>0</SpaceID></CategoryDTO>";
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/workflowstatus?status={1}&workflowID={2}", Program.ROOT_URL, 1, 1);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "PUT";
-                //set the content header type. Note: use "application/json" for JSON
-                myRequest.ContentType = "application/xml";
-                byte[] data = Encoding.UTF8.GetBytes(postData);
-                myRequest.ContentLength = data.Length;
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-                //add the data to be posted in the request stream
-                var requestStream = myRequest.GetRequestStream();
-                requestStream.Write(data, 0, data.Length);
-                requestStream.Close();
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        #endregion
-
-        #region Get Methods
-
-        public static void GetBlog(int blogID)
-        {
-            try
-            {
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/user?userName={1}&blogID={2}", Program.ROOT_URL, 1, 1);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "GET";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        public static void GetBlog(string userName)
-        {
-            try
-            {
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}articleservice.svc/articles/statistics", Program.ROOT_URL);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "GET";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        public static void GetBlogsByUserID(int userID)
-        {
-            try
-            {
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}articleservice.svc/articles/statistics", Program.ROOT_URL);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "GET";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        public static void GetBlogIDs(int userID, bool? isActive)
-        {
-            try
-            {
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}articleservice.svc/articles/statistics", Program.ROOT_URL);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "GET";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        public static void GetAllBlogs()
-        {
-            try
-            {
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/{1}", Program.ROOT_URL, 1);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "GET";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        public static void GetBlogs(bool? isActive, int? categoryID, int? userID)
-        {
-            try
-            {
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}articleservice.svc/articles/statistics", Program.ROOT_URL);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "GET";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-
-        public static void GetTopNBlogContributors(int spaceID, int year, int month, int N)
-        {
-            try
-            {
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/topcontributors?spaceID={1}&year={2}&month={3}&noofcontributers={4}", Program.ROOT_URL, 1, 1, 1, 1);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "GET";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-
-        public static void GetAllBlogs(int categoryID)
-        {
-            try
-            {
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}articleservice.svc/articles/statistics", Program.ROOT_URL);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "GET";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        public static void GetBlogAuthors(int blogID)
-        {
-            try
-            {
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/author/{1}", Program.ROOT_URL, 1);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "GET";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-
-        #endregion
-
-        #endregion Blog Related
+        //#region Blog Related
+
+        //#region CRUD Blog Methods
+
+        //public static void CreateBlog()
+        //{
+        //    try
+        //    {
+        //        //Add a new space using the REST API in Communifire
+        //        //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
+        //        string postData = "<BlogDTO><BlogName>Blog Name</BlogName><Intro>Blog Intro</Intro><UserID>1</UserID></BlogDTO>";
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs", Program.ROOT_URL);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "POST";
+        //        //set the content header type. Note: use "application/json" for JSON
+        //        myRequest.ContentType = "application/xml";
+        //        byte[] data = Encoding.UTF8.GetBytes(postData);
+        //        myRequest.ContentLength = data.Length;
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+        //        //add the data to be posted in the request stream
+        //        var requestStream = myRequest.GetRequestStream();
+        //        requestStream.Write(data, 0, data.Length);
+        //        requestStream.Close();
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+
+        //public static void UpdateBlog()
+        //{
+        //    try
+        //    {
+        //        //Add a new space using the REST API in Communifire
+        //        //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
+        //        string postData = "<BlogDTO><BlogName>Blog Name</BlogName><Intro>Blog Intro</Intro><UserID>1</UserID></BlogDTO><BlogID>36</BlogID";
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs", Program.ROOT_URL);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "PUT";
+        //        //set the content header type. Note: use "application/json" for JSON
+        //        myRequest.ContentType = "application/xml";
+        //        byte[] data = Encoding.UTF8.GetBytes(postData);
+        //        myRequest.ContentLength = data.Length;
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+        //        //add the data to be posted in the request stream
+        //        var requestStream = myRequest.GetRequestStream();
+        //        requestStream.Write(data, 0, data.Length);
+        //        requestStream.Close();
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+
+        //public static void DeleteBlog(int blogID)
+        //{
+        //    try
+        //    {
+        //        //Deletes a community user using the REST API based on user ID
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/{1}", Program.ROOT_URL, 1);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "DELETE";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+
+        //public static void AssignBlogAuthor(int blogID, int userID)
+        //{
+        //    try
+        //    {
+        //        //Add a new space using the REST API in Communifire
+        //        //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
+        //        string postData = "<CategoryDTO><ActiveStatus>1</ActiveStatus><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Default Rest API Article Category</CategoryName><Headline>Default Rest API Article Category</Headline><MetaDescription>article</MetaDescription>Default Rest API Article Category<MetaKeywords>test article</MetaKeywords><MetaTitle>Article Meta Title</MetaTitle><ParentID>0</ParentID><ParentName></ParentName><SEOName>Default-Rest-API-Article-Category</SEOName><SpaceID>0</SpaceID></CategoryDTO>";
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/assignauthor?userID={1}&blogID={2}", Program.ROOT_URL, 1, 1);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "PUT";
+        //        //set the content header type. Note: use "application/json" for JSON
+        //        myRequest.ContentType = "application/xml";
+        //        byte[] data = Encoding.UTF8.GetBytes(postData);
+        //        myRequest.ContentLength = data.Length;
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+        //        //add the data to be posted in the request stream
+        //        var requestStream = myRequest.GetRequestStream();
+        //        requestStream.Write(data, 0, data.Length);
+        //        requestStream.Close();
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+
+        //public static void DeleteBlogAuthors(int blogID)
+        //{
+        //    try
+        //    {
+        //        //Deletes a community user using the REST API based on user ID
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/deleteauthor/{1}", Program.ROOT_URL, 1);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "DELETE";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+
+        //public static void SetBlogWorkflowStatus(bool status, int workflowID)
+        //{
+        //    try
+        //    {
+        //        //Add a new space using the REST API in Communifire
+        //        //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
+        //        string postData = "<CategoryDTO><ActiveStatus>1</ActiveStatus><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Default Rest API Article Category</CategoryName><Headline>Default Rest API Article Category</Headline><MetaDescription>article</MetaDescription>Default Rest API Article Category<MetaKeywords>test article</MetaKeywords><MetaTitle>Article Meta Title</MetaTitle><ParentID>0</ParentID><ParentName></ParentName><SEOName>Default-Rest-API-Article-Category</SEOName><SpaceID>0</SpaceID></CategoryDTO>";
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/workflowstatus?status={1}&workflowID={2}", Program.ROOT_URL, 1, 1);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "PUT";
+        //        //set the content header type. Note: use "application/json" for JSON
+        //        myRequest.ContentType = "application/xml";
+        //        byte[] data = Encoding.UTF8.GetBytes(postData);
+        //        myRequest.ContentLength = data.Length;
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+        //        //add the data to be posted in the request stream
+        //        var requestStream = myRequest.GetRequestStream();
+        //        requestStream.Write(data, 0, data.Length);
+        //        requestStream.Close();
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //#endregion
+
+        //#region Get Methods
+
+        //public static void GetBlog(int blogID)
+        //{
+        //    try
+        //    {
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/user?userName={1}&blogID={2}", Program.ROOT_URL, 1, 1);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "GET";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //public static void GetBlog(string userName)
+        //{
+        //    try
+        //    {
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}articleservice.svc/articles/statistics", Program.ROOT_URL);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "GET";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //public static void GetBlogsByUserID(int userID)
+        //{
+        //    try
+        //    {
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}articleservice.svc/articles/statistics", Program.ROOT_URL);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "GET";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //public static void GetBlogIDs(int userID, bool? isActive)
+        //{
+        //    try
+        //    {
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}articleservice.svc/articles/statistics", Program.ROOT_URL);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "GET";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //public static void GetAllBlogs()
+        //{
+        //    try
+        //    {
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/{1}", Program.ROOT_URL, 1);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "GET";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //public static void GetBlogs(bool? isActive, int? categoryID, int? userID)
+        //{
+        //    try
+        //    {
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}articleservice.svc/articles/statistics", Program.ROOT_URL);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "GET";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+
+        //public static void GetTopNBlogContributors(int spaceID, int year, int month, int N)
+        //{
+        //    try
+        //    {
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/topcontributors?spaceID={1}&year={2}&month={3}&noofcontributers={4}", Program.ROOT_URL, 1, 1, 1, 1);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "GET";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+
+        //public static void GetAllBlogs(int categoryID)
+        //{
+        //    try
+        //    {
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}articleservice.svc/articles/statistics", Program.ROOT_URL);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "GET";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //public static void GetBlogAuthors(int blogID)
+        //{
+        //    try
+        //    {
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/author/{1}", Program.ROOT_URL, 1);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "GET";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+
+        //#endregion
+
+        //#endregion Blog Related
 
         #region Blog Entry Related
 
@@ -958,7 +958,7 @@ namespace Communifire.RestApiSamples
             {
                 //Add a new space using the REST API in Communifire
                 //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
-                string postData = "<BlogEntryDTO><AnonymousComments>false</AnonymousComments><BlogID>1</BlogID><CategoryID>1</CategoryID><EntryTitle>Test Blog Entry</EntryTitle><EntryIntro>Test Blog Entry</EntryIntro><EntryText>Test Blog Entry</EntryText><Excerpt>Test Blog Entry</Excerpt><IsFeatured>true</IsFeatured><IsLatest>false</IsLatest><IsPrivateSpace>false</IsPrivateSpace><MediaServerID>1</MediaServerID><MetaDescription>MetaDescription</MetaDescription><MetaKeywords>MetaKeywords</MetaKeywords><MetaTitle>MetaTitle</MetaTitle><SpaceID>0</SpaceID><StatusID>1</StatusID><Stub>test-blog-entry</Stub><UserID>1</UserID></BlogEntryDTO>";
+                string postData = "<BlogEntryDTO><BlogID>1</BlogID><CategoryID>1</CategoryID><EntryText>OO HHTest Blog Entry</EntryText><EntryTitle>OO Test Blog Entry</EntryTitle></BlogEntryDTO>";
                 //set the RESTful URL
                 string serviceUrl = string.Format("{0}blogservice.svc/blogs/blogentry", Program.ROOT_URL);
 
@@ -1027,7 +1027,7 @@ namespace Communifire.RestApiSamples
             {
                 //Add a new space using the REST API in Communifire
                 //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
-                string postData = "<BlogEntryDTO><BlogEntryID>166</BlogEntryID><AnonymousComments>false</AnonymousComments><BlogID>1</BlogID><CategoryID>1</CategoryID><EntryTitle>This is test blogentry</EntryTitle><EntryIntro>Test Blog Entry</EntryIntro><EntryText>Test Blog Entry</EntryText><Excerpt>Test Blog Entry</Excerpt><IsFeatured>true</IsFeatured><IsLatest>false</IsLatest><IsPrivateSpace>false</IsPrivateSpace><MetaDescription>MetaDescription</MetaDescription><MetaKeywords>MetaKeywords</MetaKeywords><MetaTitle>MetaTitle</MetaTitle><SpaceID>0</SpaceID><StatusID>1</StatusID><Stub>test-blog-entry</Stub><UserID>1</UserID></BlogEntryDTO>";
+                string postData = "<BlogEntryDTO><BlogEntryID>168</BlogEntryID><EntryTitle>Mahila Delhi Policia</EntryTitle><UpdatedEntryText>Mahila police sucks</UpdatedEntryText></BlogEntryDTO>";
                 //set the RESTful URL
                 string serviceUrl = string.Format("{0}blogservice.svc/blogs/blogentry", Program.ROOT_URL);
 
@@ -2033,1220 +2033,1221 @@ namespace Communifire.RestApiSamples
         }
         #endregion Blog Entry Related
 
-        #region Blog Category Related
-
-        #region CRUD Blog Category
-        public static void CreateBlogCategory()
-        {
-            try
-            {
-                //Add a new space using the REST API in Communifire
-                //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
-                string postData = "<CategoryDTO><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Default Rest API Article Category</CategoryName></CategoryDTO>";
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/category", Program.ROOT_URL);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "POST";
-                //set the content header type. Note: use "application/json" for JSON
-                myRequest.ContentType = "application/xml";
-                byte[] data = Encoding.UTF8.GetBytes(postData);
-                myRequest.ContentLength = data.Length;
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-                //add the data to be posted in the request stream
-                var requestStream = myRequest.GetRequestStream();
-                requestStream.Write(data, 0, data.Length);
-                requestStream.Close();
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-
-        public static void UpdateBlogCategory()
-        {
-            try
-            {
-                //Add a new space using the REST API in Communifire
-                //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
-                string postData = "<CategoryDTO><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Default Rest API Article Category</CategoryName><CategoryID>4</CategoryID></CategoryDTO>";
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/category", Program.ROOT_URL);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "PUT";
-                //set the content header type. Note: use "application/json" for JSON
-                myRequest.ContentType = "application/xml";
-                byte[] data = Encoding.UTF8.GetBytes(postData);
-                myRequest.ContentLength = data.Length;
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-                //add the data to be posted in the request stream
-                var requestStream = myRequest.GetRequestStream();
-                requestStream.Write(data, 0, data.Length);
-                requestStream.Close();
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-
-        public static void AssignDeletedCategory(int deletedCategoryID, int newCategoryID)
-        {
-            try
-            {
-                //Add a new space using the REST API in Communifire
-                //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
-                string postData = "<CategoryDTO><ActiveStatus>1</ActiveStatus><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Default Rest API Article Category</CategoryName><Headline>Default Rest API Article Category</Headline><MetaDescription>article</MetaDescription>Default Rest API Article Category<MetaKeywords>test article</MetaKeywords><MetaTitle>Article Meta Title</MetaTitle><ParentID>0</ParentID><ParentName></ParentName><SEOName>Default-Rest-API-Article-Category</SEOName><SpaceID>0</SpaceID></CategoryDTO>";
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/category/assigncategory", Program.ROOT_URL, 1);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "PUT";
-                //set the content header type. Note: use "application/json" for JSON
-                myRequest.ContentType = "application/xml";
-                byte[] data = Encoding.UTF8.GetBytes(postData);
-                myRequest.ContentLength = data.Length;
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-                //add the data to be posted in the request stream
-                var requestStream = myRequest.GetRequestStream();
-                requestStream.Write(data, 0, data.Length);
-                requestStream.Close();
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        public static void DeleteBlogCategory(int categoryID)
-        {
-            try
-            {
-                //Deletes a community user using the REST API based on user ID
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/category/{1}", Program.ROOT_URL, 1);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "DELETE";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        #endregion
-
-        #region Get Methods
-        public static void GetCategory(int categoryID)
-        {
-            try
-            {
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/category/{1}", Program.ROOT_URL, 1);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "GET";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        public static void GetCategoryByBlogID(int blogID)
-        {
-            try
-            {
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/category/blog/{1}", Program.ROOT_URL, 1);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "GET";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        public static void GetCategoryIDByUserID(int userID)
-        {
-            try
-            {
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/category/user/{1}", Program.ROOT_URL, 1);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "GET";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        public static void GetAllBlogCategories()
-        {
-            try
-            {
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}articleservice.svc/articles/statistics", Program.ROOT_URL);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "GET";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        public static void GetBlogCategories(int startPage, int pageLength)
-        {
-            try
-            {
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/category/categories?startpage={1}&pagelength={2}", Program.ROOT_URL, 1, 15);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "GET";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        #endregion
-
-        #endregion Blog Category Related
-
-        #region Blog Comment related methods
-
-        #region CRUD Blog Comment
-        public static void CreateBlogComment()
-        {
-            try
-            {
-                //Add a new space using the REST API in Communifire
-                //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
-                string postData = "<CategoryDTO><ActiveStatus>1</ActiveStatus><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Default Rest API Article Category</CategoryName><Headline>Default Rest API Article Category</Headline><MetaDescription>article</MetaDescription>Default Rest API Article Category<MetaKeywords>test article</MetaKeywords><MetaTitle>Article Meta Title</MetaTitle><ParentID>0</ParentID><ParentName></ParentName><SEOName>Default-Rest-API-Article-Category</SEOName><SpaceID>0</SpaceID></CategoryDTO>";
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/comment", Program.ROOT_URL);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "POST";
-                //set the content header type. Note: use "application/json" for JSON
-                myRequest.ContentType = "application/xml";
-                byte[] data = Encoding.UTF8.GetBytes(postData);
-                myRequest.ContentLength = data.Length;
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-                //add the data to be posted in the request stream
-                var requestStream = myRequest.GetRequestStream();
-                requestStream.Write(data, 0, data.Length);
-                requestStream.Close();
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        public static void UpdateBlogComment()
-        {
-            try
-            {
-                //Add a new space using the REST API in Communifire
-                //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
-                string postData = "<CategoryDTO><ActiveStatus>1</ActiveStatus><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Default Rest API Article Category</CategoryName><Headline>Default Rest API Article Category</Headline><MetaDescription>article</MetaDescription>Default Rest API Article Category<MetaKeywords>test article</MetaKeywords><MetaTitle>Article Meta Title</MetaTitle><ParentID>0</ParentID><ParentName></ParentName><SEOName>Default-Rest-API-Article-Category</SEOName><SpaceID>0</SpaceID></CategoryDTO>";
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/comment", Program.ROOT_URL);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "PUT";
-                //set the content header type. Note: use "application/json" for JSON
-                myRequest.ContentType = "application/xml";
-                byte[] data = Encoding.UTF8.GetBytes(postData);
-                myRequest.ContentLength = data.Length;
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-                //add the data to be posted in the request stream
-                var requestStream = myRequest.GetRequestStream();
-                requestStream.Write(data, 0, data.Length);
-                requestStream.Close();
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        public static void DeleteBlogComment(int blogCommentID)
-        {
-            try
-            {
-                //Deletes a community user using the REST API based on user ID
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/comment/{1}", Program.ROOT_URL, 1);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "DELETE";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        #endregion
-
-        #region Get Methods
-        public static void GetComment(int blogCommentID)
-        {
-            try
-            {
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/comment/{1}", Program.ROOT_URL, 1);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "GET";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        public static void GetBlogComments()
-        {
-            try
-            {
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/comment/list?spaceID={1}&userID={2}&blogEntryID={3}&status={4}&sortBlogCommentColumn={5}&sortOrderType={6}&startPage={7}&pageLength={8}", Program.ROOT_URL, 1, 1, 1, 1, 1, 1, 1, 1);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "GET";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        public static void SetCommentStatus(int commentID, int status)
-        {
-            try
-            {
-                //Add a new space using the REST API in Communifire
-                //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
-                string postData = "<CategoryDTO><ActiveStatus>1</ActiveStatus><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Default Rest API Article Category</CategoryName><Headline>Default Rest API Article Category</Headline><MetaDescription>article</MetaDescription>Default Rest API Article Category<MetaKeywords>test article</MetaKeywords><MetaTitle>Article Meta Title</MetaTitle><ParentID>0</ParentID><ParentName></ParentName><SEOName>Default-Rest-API-Article-Category</SEOName><SpaceID>0</SpaceID></CategoryDTO>";
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/comment/commentstatus??commentID={1}&status={2}", Program.ROOT_URL, 1, 1);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "PUT";
-                //set the content header type. Note: use "application/json" for JSON
-                myRequest.ContentType = "application/xml";
-                byte[] data = Encoding.UTF8.GetBytes(postData);
-                myRequest.ContentLength = data.Length;
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-                //add the data to be posted in the request stream
-                var requestStream = myRequest.GetRequestStream();
-                requestStream.Write(data, 0, data.Length);
-                requestStream.Close();
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        #endregion
-
-        #endregion//end blog Comment related methods
-
-        #region Blog Entry Vote related methods
-
-        #region CRUD Blog Entry vote
-        public static void CreateBlogEntryVote()
-        {
-            try
-            {
-                //Add a new space using the REST API in Communifire
-                //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
-                string postData = "<CategoryDTO><ActiveStatus>1</ActiveStatus><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Default Rest API Article Category</CategoryName><Headline>Default Rest API Article Category</Headline><MetaDescription>article</MetaDescription>Default Rest API Article Category<MetaKeywords>test article</MetaKeywords><MetaTitle>Article Meta Title</MetaTitle><ParentID>0</ParentID><ParentName></ParentName><SEOName>Default-Rest-API-Article-Category</SEOName><SpaceID>0</SpaceID></CategoryDTO>";
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/vote", Program.ROOT_URL);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "POST";
-                //set the content header type. Note: use "application/json" for JSON
-                myRequest.ContentType = "application/xml";
-                byte[] data = Encoding.UTF8.GetBytes(postData);
-                myRequest.ContentLength = data.Length;
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-                //add the data to be posted in the request stream
-                var requestStream = myRequest.GetRequestStream();
-                requestStream.Write(data, 0, data.Length);
-                requestStream.Close();
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        public static void DeleteBlogEntryVote(int voteID)
-        {
-            try
-            {
-                //Deletes a community user using the REST API based on user ID
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/vote/{voteID}", Program.ROOT_URL, 1);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "DELETE";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        #endregion
-
-        #region GET Methods
-        public static void GetVote(int userID, int blogEntryID)
-        {
-            try
-            {
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/vote?userID={1}&blogEntryID={2}", Program.ROOT_URL, 1, 1);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "GET";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        #endregion
-
-        public static void CheckIfAlreadyVoted(int userID, int blogEntryID)
-        {
-            try
-            {
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/vote/alreadyvoted?userID={1}&blogEntryID={2}", Program.ROOT_URL, 1, 1);
-
-                //create a new HttpRequest
-                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "GET";
-                //add the API key
-                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-
-                //post the request and get the response details
-                using (var response = myRequest.GetResponse())
-                {
-                    if (response.ContentLength > 0)
-                    {
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-
-                            //read the results string
-                            string result = reader.ReadToEnd();
-                            //check the results assuming XML is returned: note for JSON: use JSON stringfy
-                            XmlDocument resultsXml = new XmlDocument();
-                            resultsXml.LoadXml(result);
-                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
-                            if (isError)
-                            {
-                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
-                                Console.Write(responseMessage);
-                            }
-                            else
-                            {
-                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
-                                if (!string.IsNullOrEmpty(serviceResult))
-                                {
-                                    Console.WriteLine("Method successfully called.");
-                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
-                                }
-                                else
-                                    Console.WriteLine("Method called but result is not accurate.");
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Failed because: 0 length content returned.");
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            Console.Read();
-        }
-        #endregion Vote related methods
+        //#region Blog Category Related
+
+        //#region CRUD Blog Category
+        //public static void CreateBlogCategory()
+        //{
+        //    try
+        //    {
+        //        //Add a new space using the REST API in Communifire
+        //        //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
+        //        string postData = "<CategoryDTO><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Default Rest API Article Category</CategoryName></CategoryDTO>";
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/category", Program.ROOT_URL);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "POST";
+        //        //set the content header type. Note: use "application/json" for JSON
+        //        myRequest.ContentType = "application/xml";
+        //        byte[] data = Encoding.UTF8.GetBytes(postData);
+        //        myRequest.ContentLength = data.Length;
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+        //        //add the data to be posted in the request stream
+        //        var requestStream = myRequest.GetRequestStream();
+        //        requestStream.Write(data, 0, data.Length);
+        //        requestStream.Close();
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+
+        //public static void UpdateBlogCategory()
+        //{
+        //    try
+        //    {
+        //        //Add a new space using the REST API in Communifire
+        //        //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
+        //        string postData = "<CategoryDTO><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Default Rest API Article Category</CategoryName><CategoryID>4</CategoryID></CategoryDTO>";
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/category", Program.ROOT_URL);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "PUT";
+        //        //set the content header type. Note: use "application/json" for JSON
+        //        myRequest.ContentType = "application/xml";
+        //        byte[] data = Encoding.UTF8.GetBytes(postData);
+        //        myRequest.ContentLength = data.Length;
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+        //        //add the data to be posted in the request stream
+        //        var requestStream = myRequest.GetRequestStream();
+        //        requestStream.Write(data, 0, data.Length);
+        //        requestStream.Close();
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+
+        //public static void AssignDeletedCategory(int deletedCategoryID, int newCategoryID)
+        //{
+        //    try
+        //    {
+        //        //Add a new space using the REST API in Communifire
+        //        //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
+        //        string postData = "<CategoryDTO><ActiveStatus>1</ActiveStatus><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Default Rest API Article Category</CategoryName><Headline>Default Rest API Article Category</Headline><MetaDescription>article</MetaDescription>Default Rest API Article Category<MetaKeywords>test article</MetaKeywords><MetaTitle>Article Meta Title</MetaTitle><ParentID>0</ParentID><ParentName></ParentName><SEOName>Default-Rest-API-Article-Category</SEOName><SpaceID>0</SpaceID></CategoryDTO>";
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/category/assigncategory", Program.ROOT_URL, 1);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "PUT";
+        //        //set the content header type. Note: use "application/json" for JSON
+        //        myRequest.ContentType = "application/xml";
+        //        byte[] data = Encoding.UTF8.GetBytes(postData);
+        //        myRequest.ContentLength = data.Length;
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+        //        //add the data to be posted in the request stream
+        //        var requestStream = myRequest.GetRequestStream();
+        //        requestStream.Write(data, 0, data.Length);
+        //        requestStream.Close();
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //public static void DeleteBlogCategory(int categoryID)
+        //{
+        //    try
+        //    {
+        //        //Deletes a community user using the REST API based on user ID
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/category/{1}", Program.ROOT_URL, 1);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "DELETE";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //#endregion
+
+        //#region Get Methods
+        //public static void GetCategory(int categoryID)
+        //{
+        //    try
+        //    {
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/category/{1}", Program.ROOT_URL, 1);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "GET";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //public static void GetCategoryByBlogID(int blogID)
+        //{
+        //    try
+        //    {
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/category/blog/{1}", Program.ROOT_URL, 1);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "GET";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //public static void GetCategoryIDByUserID(int userID)
+        //{
+        //    try
+        //    {
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/category/user/{1}", Program.ROOT_URL, 1);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "GET";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //public static void GetAllBlogCategories()
+        //{
+        //    try
+        //    {
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}articleservice.svc/articles/statistics", Program.ROOT_URL);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "GET";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //public static void GetBlogCategories(int startPage, int pageLength)
+        //{
+        //    try
+        //    {
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/category/categories?startpage={1}&pagelength={2}", Program.ROOT_URL, 1, 15);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "GET";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //#endregion
+
+        //#endregion Blog Category Related
+
+        //#region Blog Comment related methods
+
+        //#region CRUD Blog Comment
+        //public static void CreateBlogComment()
+        //{
+        //    try
+        //    {
+        //        //Add a new space using the REST API in Communifire
+        //        //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
+        //        string postData = "<CategoryDTO><ActiveStatus>1</ActiveStatus><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Default Rest API Article Category</CategoryName><Headline>Default Rest API Article Category</Headline><MetaDescription>article</MetaDescription>Default Rest API Article Category<MetaKeywords>test article</MetaKeywords><MetaTitle>Article Meta Title</MetaTitle><ParentID>0</ParentID><ParentName></ParentName><SEOName>Default-Rest-API-Article-Category</SEOName><SpaceID>0</SpaceID></CategoryDTO>";
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/comment", Program.ROOT_URL);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "POST";
+        //        //set the content header type. Note: use "application/json" for JSON
+        //        myRequest.ContentType = "application/xml";
+        //        byte[] data = Encoding.UTF8.GetBytes(postData);
+        //        myRequest.ContentLength = data.Length;
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+        //        //add the data to be posted in the request stream
+        //        var requestStream = myRequest.GetRequestStream();
+        //        requestStream.Write(data, 0, data.Length);
+        //        requestStream.Close();
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //public static void UpdateBlogComment()
+        //{
+        //    try
+        //    {
+        //        //Add a new space using the REST API in Communifire
+        //        //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
+        //        string postData = "<CategoryDTO><ActiveStatus>1</ActiveStatus><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Default Rest API Article Category</CategoryName><Headline>Default Rest API Article Category</Headline><MetaDescription>article</MetaDescription>Default Rest API Article Category<MetaKeywords>test article</MetaKeywords><MetaTitle>Article Meta Title</MetaTitle><ParentID>0</ParentID><ParentName></ParentName><SEOName>Default-Rest-API-Article-Category</SEOName><SpaceID>0</SpaceID></CategoryDTO>";
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/comment", Program.ROOT_URL);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "PUT";
+        //        //set the content header type. Note: use "application/json" for JSON
+        //        myRequest.ContentType = "application/xml";
+        //        byte[] data = Encoding.UTF8.GetBytes(postData);
+        //        myRequest.ContentLength = data.Length;
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+        //        //add the data to be posted in the request stream
+        //        var requestStream = myRequest.GetRequestStream();
+        //        requestStream.Write(data, 0, data.Length);
+        //        requestStream.Close();
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //public static void DeleteBlogComment(int blogCommentID)
+        //{
+        //    try
+        //    {
+        //        //Deletes a community user using the REST API based on user ID
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/comment/{1}", Program.ROOT_URL, 1);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "DELETE";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //#endregion
+
+        //#region Get Methods
+        //public static void GetComment(int blogCommentID)
+        //{
+        //    try
+        //    {
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/comment/{1}", Program.ROOT_URL, 1);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "GET";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //public static void GetBlogComments()
+        //{
+        //    try
+        //    {
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/comment/list?spaceID={1}&userID={2}&blogEntryID={3}&status={4}&sortBlogCommentColumn={5}&sortOrderType={6}&startPage={7}&pageLength={8}", Program.ROOT_URL, 1, 1, 1, 1, 1, 1, 1, 1);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "GET";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //public static void SetCommentStatus(int commentID, int status)
+        //{
+        //    try
+        //    {
+        //        //Add a new space using the REST API in Communifire
+        //        //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
+        //        string postData = "<CategoryDTO><ActiveStatus>1</ActiveStatus><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Default Rest API Article Category</CategoryName><Headline>Default Rest API Article Category</Headline><MetaDescription>article</MetaDescription>Default Rest API Article Category<MetaKeywords>test article</MetaKeywords><MetaTitle>Article Meta Title</MetaTitle><ParentID>0</ParentID><ParentName></ParentName><SEOName>Default-Rest-API-Article-Category</SEOName><SpaceID>0</SpaceID></CategoryDTO>";
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/comment/commentstatus??commentID={1}&status={2}", Program.ROOT_URL, 1, 1);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "PUT";
+        //        //set the content header type. Note: use "application/json" for JSON
+        //        myRequest.ContentType = "application/xml";
+        //        byte[] data = Encoding.UTF8.GetBytes(postData);
+        //        myRequest.ContentLength = data.Length;
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+        //        //add the data to be posted in the request stream
+        //        var requestStream = myRequest.GetRequestStream();
+        //        requestStream.Write(data, 0, data.Length);
+        //        requestStream.Close();
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //#endregion
+
+        //#endregion//end blog Comment related methods
+
+        //#region Blog Entry Vote related methods
+
+        //#region CRUD Blog Entry vote
+        //public static void CreateBlogEntryVote()
+        //{
+        //    try
+        //    {
+        //        //Add a new space using the REST API in Communifire
+        //        //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
+        //        string postData = "<CategoryDTO><ActiveStatus>1</ActiveStatus><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Default Rest API Article Category</CategoryName><Headline>Default Rest API Article Category</Headline><MetaDescription>article</MetaDescription>Default Rest API Article Category<MetaKeywords>test article</MetaKeywords><MetaTitle>Article Meta Title</MetaTitle><ParentID>0</ParentID><ParentName></ParentName><SEOName>Default-Rest-API-Article-Category</SEOName><SpaceID>0</SpaceID></CategoryDTO>";
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/vote", Program.ROOT_URL);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "POST";
+        //        //set the content header type. Note: use "application/json" for JSON
+        //        myRequest.ContentType = "application/xml";
+        //        byte[] data = Encoding.UTF8.GetBytes(postData);
+        //        myRequest.ContentLength = data.Length;
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+        //        //add the data to be posted in the request stream
+        //        var requestStream = myRequest.GetRequestStream();
+        //        requestStream.Write(data, 0, data.Length);
+        //        requestStream.Close();
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //public static void DeleteBlogEntryVote(int voteID)
+        //{
+        //    try
+        //    {
+        //        //Deletes a community user using the REST API based on user ID
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/vote/{voteID}", Program.ROOT_URL, 1);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "DELETE";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //#endregion
+
+        //#region GET Methods
+        //public static void GetVote(int userID, int blogEntryID)
+        //{
+        //    try
+        //    {
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/vote?userID={1}&blogEntryID={2}", Program.ROOT_URL, 1, 1);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "GET";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //#endregion
+
+        //public static void CheckIfAlreadyVoted(int userID, int blogEntryID)
+        //{
+        //    try
+        //    {
+        //        //set the RESTful URL
+        //        string serviceUrl = string.Format("{0}blogservice.svc/blogs/blog/vote/alreadyvoted?userID={1}&blogEntryID={2}", Program.ROOT_URL, 1, 1);
+
+        //        //create a new HttpRequest
+        //        var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+        //        myRequest.Method = "GET";
+        //        //add the API key
+        //        myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+        //        //post the request and get the response details
+        //        using (var response = myRequest.GetResponse())
+        //        {
+        //            if (response.ContentLength > 0)
+        //            {
+        //                using (var reader = new StreamReader(response.GetResponseStream()))
+        //                {
+
+        //                    //read the results string
+        //                    string result = reader.ReadToEnd();
+        //                    //check the results assuming XML is returned: note for JSON: use JSON stringfy
+        //                    XmlDocument resultsXml = new XmlDocument();
+        //                    resultsXml.LoadXml(result);
+        //                    bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+        //                    if (isError)
+        //                    {
+        //                        string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+        //                        Console.Write(responseMessage);
+        //                    }
+        //                    else
+        //                    {
+        //                        string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+        //                        if (!string.IsNullOrEmpty(serviceResult))
+        //                        {
+        //                            Console.WriteLine("Method successfully called.");
+        //                            Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+        //                        }
+        //                        else
+        //                            Console.WriteLine("Method called but result is not accurate.");
+        //                    }
+
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Failed because: 0 length content returned.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Console.WriteLine(exception.Message);
+        //    }
+        //    Console.Read();
+        //}
+        //#endregion Vote related methods
     }
+    
     public class BlogEntryDTO
     {
 
