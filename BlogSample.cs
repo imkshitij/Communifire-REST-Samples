@@ -958,7 +958,7 @@ namespace Communifire.RestApiSamples
             {
                 //Add a new space using the REST API in Communifire
                 //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
-                string postData = "<BlogEntryDTO><BlogID>1</BlogID><CategoryID>1</CategoryID><EntryText>OO HHTest Blog Entry</EntryText><EntryTitle>OO Test Blog Entry</EntryTitle></BlogEntryDTO>";
+                string postData = "<BlogEntryDTO><BlogID>14</BlogID><CategoryID>1</CategoryID><EntryText>OO HHTest Blog Entry</EntryText><EntryTitle>OO Test Blog Entry</EntryTitle></BlogEntryDTO>";
                 //set the RESTful URL
                 string serviceUrl = string.Format("{0}blogservice.svc/blogs/blogentry", Program.ROOT_URL);
 
@@ -1581,16 +1581,16 @@ namespace Communifire.RestApiSamples
             }
             Console.Read();
         }
-        public static void SetBlogEntryStatus()
+        public static void SetBlogEntryStatus(int blogEntryID, int status)
         {
             try
             {
                 //set the RESTful URL
-                string serviceUrl = string.Format("{0}articleservice.svc/articles/statistics", Program.ROOT_URL);
+                string serviceUrl = string.Format("{0}blogservice.svc/blogs/blogentry?blogEntryID={1}&status={2}", Program.ROOT_URL,blogEntryID,status);
 
                 //create a new HttpRequest
                 var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "GET";
+                myRequest.Method = "PUT";
                 //add the API key
                 myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
 
