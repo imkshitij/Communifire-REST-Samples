@@ -1592,6 +1592,7 @@ namespace Communifire.RestApiSamples
                 //create a new HttpRequest
                 var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
                 myRequest.Method = "PUT";
+                myRequest.ContentLength = 0; //This is IMP
                 //add the API key
                 myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
 
