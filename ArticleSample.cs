@@ -428,7 +428,7 @@ namespace Communifire.RestApiSamples
         {
             try
             {
-                string query = "?spaceID=0&userID=1&status=1";
+                string query = "?categoryID=1&spaceID=0&userID=1&status=1&isFeatured=true&sortColumn=1&sortOrder=1&startPage=1&pageLength=10";
                 string serviceUrl = string.Format("{0}articleservice.svc/articles", Program.ROOT_URL);
                 serviceUrl = string.Format("{0}{1}", serviceUrl, query);
 
@@ -1163,7 +1163,7 @@ namespace Communifire.RestApiSamples
         {
             try
             {
-                string postData = "<CategoryDTO><ActiveStatus>1</ActiveStatus><CategoryDescription>test rest api article category</CategoryDescription><CategoryName>Rest API Article Category</CategoryName><Headline>Default Rest API Article Category</Headline><SEOName>Default-Rest-API-Article-Category</SEOName><SpaceID>0</SpaceID></CategoryDTO>";
+                string postData = "<CategoryDTO><ActiveStatus>1</ActiveStatus><CategoryDescription>Axero</CategoryDescription><CategoryName>Axero</CategoryName><Headline>Axero</Headline><SEOName>raviraviraviraviraviDefault-Rest-API-Article-Category</SEOName><SpaceID>0</SpaceID></CategoryDTO>";
                 //set the RESTful URL
                 string serviceUrl = string.Format("{0}articleservice.svc/articles/category", Program.ROOT_URL);
 
@@ -1503,7 +1503,7 @@ namespace Communifire.RestApiSamples
         //}
         //#endregion
 
-        //#region Category Stub Availability 
+        //#region Category Stub Availability
         ///// <summary>
         ///// Category Stub Availability.
         ///// </summary>
@@ -1570,12 +1570,12 @@ namespace Communifire.RestApiSamples
         /// <summary>
         /// Adds the article.
         /// </summary>
-        public static void GetAllCategories(string spaceID, string parentCategoryID, string statusID, string startPage, string pageLength)
+        public static void GetAllCategories(int spaceID, int parentCategoryID, int statusID, int startPage, int pageLength)
         {
             try
             {
                 //set the RESTful URL
-                string serviceUrl = string.Format("{0}articleservice.svc/articles/category/categories?spaceID={1}&parentCategoryID={2}&statusID={3}&startPage={4}&pageLength={5}", Program.ROOT_URL,  spaceID,  parentCategoryID,  statusID,  startPage,  pageLength);
+                string serviceUrl = string.Format("{0}articleservice.svc/articles/category/categories?spaceID={1}&parentCategoryID={2}&statusID={3}&startPage={4}&pageLength={5}", Program.ROOT_URL,spaceID,parentCategoryID,statusID,startPage,pageLength);
 
                 //create a new HttpRequest
                 var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);

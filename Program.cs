@@ -13,13 +13,13 @@ namespace Communifire.RestApiSamples
 {
     class Program
     {
-        public static readonly string ROOT_URL = "http://cftesting.com/services/";//http://localhost:499/
-        public static readonly string API_KEY = "YWRtaW46YzdkZmE4MDgtNTAxNi00YjU5LTk1ZGItYzA4ZWU4Zjk5Njgz";
+        public static readonly string ROOT_URL = "http://qa.communifire.com/services/";//http://localhost:499/
+        public static readonly string API_KEY = "YWRtaW46NzU3MTk2MWUtMmJkOC00Y2VhLWI0YTktNmMwZjdjZTZhMTI1";//"YWRtaW46NzU3MTk2MWUtMmJkOC00Y2VhLWI0YTktNmMwZjdjZTZhMTI1";
             //"YWRtaW46MjNjYTQ1NzktYWI2YS00MjEwLTgyNjUtZGNkZjFkYTA1Y2Vi";
 
         static void Main(string[] args)
         {
-            BlogSample.UpdateBlogEntry();
+            //BlogSample.UpdateBlogEntry();
             //UserServiceSample.CreateCase(1, "Star REST Issue", "Star REST Issue");
             #region Space Related
            
@@ -54,6 +54,25 @@ namespace Communifire.RestApiSamples
             //DeleteUser(9);
             //SpaceProgram.AddSpace();
            // MapMarkerSample.UpdateMarkerCategory();
+          // BlogSample.SetBlogEntryStatus(64,3);
+            //BlogSample.GetBlogEntry(64);
+            //BlogSample.GetBlogEntries();
+            //Console.WriteLine("Press any key...");
+            //EventSample obj = new EventSample();
+            //obj.DeleteComment(47);
+            //ArticleSample.GetArticles();
+            //ArticleSample.GetArticles();
+            //ArticleSample.CreateArticleCategory();
+            //ArticleSample.UpdateArticleCategory(43);
+           // ArticleSample.DeleteArticleCategory(43);
+            //ArticleSample.GetArticleCategory(44);
+            //BlogSample.CreateBlogEntry();
+            //BlogSample.UpdateBlogEntry();
+            //BlogSample.GetBlogEntry(65);
+           //BlogSample.DeleteBlogEntry(45);
+            //ArticleSample.GetAllCategories(0, 0, 1, 1, 1);
+            //BlogSample.SetBlogEntryStatus(65,3);
+            BlogSample.GetBlogEntries();
             Console.ReadLine();
         }
 
