@@ -14,8 +14,8 @@ namespace Communifire.RestApiSamples
     {
         #region Event Related Methods
 
-        #region CRUD Methods
-        public void CreateEvent() 
+         #region CRUD Methods
+        public static void CreateEvent() 
         {
             try
             {
@@ -81,7 +81,7 @@ namespace Communifire.RestApiSamples
             {
                 //Add a new space using the REST API in Communifire
                 //create a new space. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
-                string postData = "<EventDTO><Address></Address><CreatedOnDate>0001-01-01T00:00:00</CreatedOnDate><Description>Description</Description><EndDate>0001-01-01T00:00:00</EndDate><EntryDate>0001-01-01T00:00:00</EntryDate><EventID>1</EventID><EventStatusID>1</EventStatusID><EventTypeID>1</EventTypeID><EventTypeName>Test EventType</EventTypeName><EventURL></EventURL><IsFeatured>false</IsFeatured><IsOnline>false</IsOnline><IsPrivateSpace>false</IsPrivateSpace><Keywords></Keywords><MediaServerRootURL>1</MediaServerRootURL><Organization>Communifire</Organization><SpaceID>1</SpaceID><StartDate>0001-01-01T00:00:00</StartDate><Telephone>1234567</Telephone><Title>Test Event</Title><UserID>1</UserID><VenueName>USA</VenueName><Views>0</Views><Website>www.test.com</Website><WhoShouldAttend></WhoShouldAttend><Zip></Zip></EventDTO>";
+                string postData = "<EventDTO><Address></Address><CreatedOnDate>0001-01-01T00:00:00</CreatedOnDate><Description>Description</Description><EndDate>0001-01-01T00:00:00</EndDate><EntryDate>0001-01-01T00:00:00</EntryDate><EventID>47</EventID><EventStatusID>1</EventStatusID><EventTypeID>1</EventTypeID><EventTypeName>Test EventType</EventTypeName><EventURL></EventURL><IsFeatured>false</IsFeatured><IsOnline>false</IsOnline><IsPrivateSpace>false</IsPrivateSpace><Keywords></Keywords><MediaServerRootURL>1</MediaServerRootURL><Organization>Communifire</Organization><SpaceID>1</SpaceID><StartDate>0001-01-01T00:00:00</StartDate><Telephone>1234567</Telephone><Title>Test Event</Title><UserID>1</UserID><VenueName>USA</VenueName><Views>0</Views><Website>www.test.com</Website><WhoShouldAttend></WhoShouldAttend><Zip></Zip></EventDTO>";
                 //set the RESTful URL
                 string serviceUrl = string.Format("{0}eventservice.svc/events/event", Program.ROOT_URL);
 
@@ -141,7 +141,7 @@ namespace Communifire.RestApiSamples
             {
                 //Deletes a community user using the REST API based on user ID
                 //set the RESTful URL
-                string serviceUrl = string.Format("{0}eventservice.svc/events/event/{1}", Program.ROOT_URL, 1);
+                string serviceUrl = string.Format("{0}eventservice.svc/events/event/{1}", Program.ROOT_URL,eventID);
 
                 //create a new HttpRequest
                 var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
