@@ -301,15 +301,24 @@ namespace Communifire.RestApiSamples
         {
             try
             {
+                string postData = string.Format("<SetArticleStatus xmlns=\"http://tempuri.org/\"><statusID>{0}</statusID></SetArticleStatus>", statusID);
                 //set the RESTful URL
-                string serviceUrl = string.Format("{0}articleservice.svc/articles/status?articleID={1}&statusID={2}", Program.ROOT_URL, articleID, statusID);
+                string serviceUrl = string.Format("{0}articleservice.svc/articles/status?articleID={1}", Program.ROOT_URL, articleID);
 
                 //create a new HttpRequest
                 var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
                 myRequest.Method = "PUT";
-                myRequest.ContentLength = 0;
+
+                myRequest.ContentType = "application/xml";
+                byte[] data = Encoding.UTF8.GetBytes(postData);
+                myRequest.ContentLength = data.Length;
+
                 //add the API key
                 myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+                var requestStream = myRequest.GetRequestStream();
+                requestStream.Write(data, 0, data.Length);
+                requestStream.Close();
 
                 //post the request and get the response details
                 using (var response = myRequest.GetResponse())
