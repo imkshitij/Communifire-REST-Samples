@@ -22,7 +22,7 @@ namespace Communifire.RestApiSamples
         static void Main(string[] args)
         {
 
-            ArticleSample.SetArticleStatus(150,1);
+            CommonSample.GetGenericContent("3", null, null, null, null, null,null, null, null, 1, 1, null, null, 1, 20);
             Console.ReadLine();
         }
     }//end class

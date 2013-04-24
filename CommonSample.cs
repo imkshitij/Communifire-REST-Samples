@@ -63,27 +63,74 @@ namespace Communifire.RestApiSamples
             Console.Read();
         }
 
-        public static void GetGenericContent()
+        public static void GetGenericContent(string entityTypeCSV, string userIDCSV, string spaceIDCSV, string tagCSV, string tagIDCSV, string tagGroupIDCSV, string fromDate, string toDate, bool? isFeatured, 
+            int? sortByColumn, int? sortOrderType, string searchKeyword, bool? searchOnlyTags, int startPage, int pageLength)
         {
             try
             {
-                string postData = "<GenericContentSearchFilterDTO></GenericContentSearchFilterDTO>";
-                //set the RESTful URL
-                string serviceUrl = string.Format("{0}commonservice.svc/genericcontent?startPage={1}&pageLength={2}", Program.ROOT_URL, 1, 30);
+                var query = new StringBuilder(string.Format("?startPage={0}&pageLength={1}", startPage, pageLength));
+                
+                if (entityTypeCSV != null)
+                {
+                    query.AppendFormat("&entityTypeCSV={0}", entityTypeCSV);
+                }
+                if (userIDCSV != null)
+                {
+                    query.AppendFormat("&userIDCSV={0}", userIDCSV);
+                }
+                if (spaceIDCSV != null)
+                {
+                    query.AppendFormat("&spaceIDCSV={0}", spaceIDCSV);
+                }
+                if (tagCSV != null)
+                {
+                    query.AppendFormat("&tagCSV={0}", tagCSV);
+                }
+                if (tagIDCSV != null)
+                {
+                    query.AppendFormat("&tagIDCSV={0}", tagIDCSV);
+                }
+                if (tagGroupIDCSV != null)
+                {
+                    query.AppendFormat("&tagGroupIDCSV={0}", tagGroupIDCSV);
+                }
+                if (fromDate != null)
+                {
+                    query.AppendFormat("&fromDate={0}", fromDate);
+                }
+                if (toDate != null)
+                {
+                    query.AppendFormat("&toDate={0}", toDate);
+                }
+                if (isFeatured != null)
+                {
+                    query.AppendFormat("&isFeatured={0}", isFeatured);
+                }
+                if (sortByColumn != null)
+                {
+                    query.AppendFormat("&sortByColumn={0}", sortByColumn);
+                }
+                if (sortOrderType != null)
+                {
+                    query.AppendFormat("&sortOrderType={0}", sortOrderType);
+                }
+                if (searchKeyword != null)
+                {
+                    query.AppendFormat("&searchKeyword={0}", searchKeyword);
+                }
+                if (searchOnlyTags != null)
+                {
+                    query.AppendFormat("&searchOnlyTags={0}", searchOnlyTags);
+                }
+                string serviceUrl =string.Format("{0}commonservice.svc/genericcontent{1}",Program.ROOT_URL, query);
 
                 //create a new HttpRequest
                 var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-                myRequest.Method = "PUT";
-                //set the content header type. Note: use "application/json" for JSON
-                myRequest.ContentType = "application/xml";
-                byte[] data = Encoding.UTF8.GetBytes(postData);
-                myRequest.ContentLength = data.Length;
+                myRequest.Method = "GET";
+
                 //add the API key
                 myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
-                //add the data to be posted in the request stream
-                var requestStream = myRequest.GetRequestStream();
-                requestStream.Write(data, 0, data.Length);
-                requestStream.Close();
+
 
                 //post the request and get the response details
                 using (var response = myRequest.GetResponse())
