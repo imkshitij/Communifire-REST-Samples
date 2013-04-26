@@ -118,7 +118,7 @@ namespace Communifire.RestApiSamples
                 //create a user. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
                 string postData = string.Format("<DyveUserDTO><Email>{0}</Email><FirstName>{1}</FirstName><IsActivated>true</IsActivated><LastName>{2}</LastName><Password>{3}</Password><UserName>{4}</UserName></DyveUserDTO>", email, firstname, lastname, password, username);
                 //set the RESTful URL
-                string serviceUrl = string.Format("{0}/services/userservice.svc/users", Program.ROOT_URL);
+                string serviceUrl = string.Format("{0}userservice.svc/users", Program.ROOT_URL);
 
                 //create a new HttpRequest
                 var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);

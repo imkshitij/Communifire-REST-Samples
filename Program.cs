@@ -13,13 +13,14 @@ namespace Communifire.RestApiSamples
 {
     class Program
     {
-        public static readonly string ROOT_URL = "http://qa.communifire.com/services/";//http://localhost:499/
-        public static readonly string API_KEY = "YWRtaW46NzU3MTk2MWUtMmJkOC00Y2VhLWI0YTktNmMwZjdjZTZhMTI1";//"YWRtaW46NzU3MTk2MWUtMmJkOC00Y2VhLWI0YTktNmMwZjdjZTZhMTI1";
-            //"YWRtaW46MjNjYTQ1NzktYWI2YS00MjEwLTgyNjUtZGNkZjFkYTA1Y2Vi";
+        public static readonly string ROOT_URL = "http://cftesting.com/services/";//http://localhost:499/
+        public static readonly string API_KEY = "YWRtaW46YzdkZmE4MDgtNTAxNi00YjU5LTk1ZGItYzA4ZWU4Zjk5Njgz";
+        //"YWRtaW46YzdkZmE4MDgtNTAxNi00YjU5LTk1ZGItYzA4ZWU4Zjk5Njgz";
 
         static void Main(string[] args)
         {
-            //BlogSample.UpdateBlogEntry();
+            //BlogSample.CreateBlogEntry();
+            UserServiceSample.AddUser("email@yy.com","jrambo", "John", "Rambo", "test");
             //UserServiceSample.CreateCase(1, "Star REST Issue", "Star REST Issue");
             #region Space Related
            
@@ -72,7 +73,7 @@ namespace Communifire.RestApiSamples
            //BlogSample.DeleteBlogEntry(45);
             //ArticleSample.GetAllCategories(0, 0, 1, 1, 1);
             //BlogSample.SetBlogEntryStatus(65,3);
-            BlogSample.GetBlogEntries();
+            //BlogSample.GetBlogEntries();
             Console.ReadLine();
         }
 
