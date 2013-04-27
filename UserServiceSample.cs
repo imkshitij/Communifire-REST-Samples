@@ -250,7 +250,7 @@ namespace Communifire.RestApiSamples
             {
                 //Add a new user using the REST API in Communifire
                 //create a user. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
-                string xmlPath = "<DyveUserDTO><Email>rest-user-email1@email.com</Email><FirstName>Rest</FirstName><LastName>User</LastName><UserID>16</UserID></DyveUserDTO>";
+                string xmlPath = "<DyveUserDTO><Email>rest-user-email1@email.com</Email><FirstName>Rest</FirstName><LastName>User</LastName><UserID>1</UserID></DyveUserDTO>";
                 //set the RESTful URL
                 string serviceUrl = string.Format("{0}userservice.svc/users", Program.ROOT_URL);
                 //set the content header type. Note: use "json" for JSON
@@ -1115,7 +1115,7 @@ namespace Communifire.RestApiSamples
                 //set the RESTful URL
                 //Noted: for local (locahost) testing, use this URL: {localhost:port}spaces/spaceservice.svc/spaces/space/geturl?spaceID={1}
                 //for star testing: use {site-url}/services/spaceservice.svc/spaces/space/geturl?spaceID={1}
-                string serviceUrl = string.Format("{0}user/userservice.svc/users/userbyid/{1}", Program.ROOT_URL, userID);
+                string serviceUrl = string.Format("{0}userservice.svc/users/userbyid/{1}", Program.ROOT_URL, userID);
                 //create a new HttpRequest
                 var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
                 myRequest.Method = "GET";
