@@ -26,7 +26,7 @@ namespace Communifire.RestApiSamples
             //WallSample.CreateWallPost("Test cool https://twitter.com/", 0, 41);
             UserServiceSample.UpdateUser();
             Console.ReadLine();
-   }
+        }
 
 
 
