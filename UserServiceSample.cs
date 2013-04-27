@@ -118,7 +118,7 @@ namespace Communifire.RestApiSamples
                 //create a user. Note: Make sure the data is in alphabetical format because serialization is done alphabetically 
                 string postData = string.Format("<DyveUserDTO><Email>{0}</Email><FirstName>{1}</FirstName><IsActivated>true</IsActivated><LastName>{2}</LastName><Password>{3}</Password><UserName>{4}</UserName></DyveUserDTO>", email, firstname, lastname, password, username);
                 //set the RESTful URL
-                string serviceUrl = string.Format("{0}/services/userservice.svc/users", Program.ROOT_URL);
+                string serviceUrl = string.Format("{0}userservice.svc/users", Program.ROOT_URL);
 
                 //create a new HttpRequest
                 var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
@@ -1115,7 +1115,7 @@ namespace Communifire.RestApiSamples
                 //set the RESTful URL
                 //Noted: for local (locahost) testing, use this URL: {localhost:port}spaces/spaceservice.svc/spaces/space/geturl?spaceID={1}
                 //for star testing: use {site-url}/services/spaceservice.svc/spaces/space/geturl?spaceID={1}
-                string serviceUrl = string.Format("{0}userservice.svc/users/userbyid/{1}", Program.ROOT_URL, userID);
+                string serviceUrl = string.Format("{0}userservice.svc/users/user/{1}", Program.ROOT_URL, userID);
                 //create a new HttpRequest
                 var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
                 myRequest.Method = "GET";
