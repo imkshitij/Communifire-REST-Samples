@@ -80,6 +80,7 @@
     <Compile Include="ArticleSample.cs" />
     <Compile Include="BlogSample.cs" />
     <Compile Include="CommonSample.cs" />
+    <Compile Include="InboxSample.cs" />
     <Compile Include="IssueTrackerSample.cs" />
     <Compile Include="DataLoadHelper.cs" />
     <Compile Include="EventSample.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="PhotoSample.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="NotificationSample.cs" />
     <Compile Include="RankSample.cs" />
     <Compile Include="RoleSample.cs" />
     <Compile Include="SpaceProgram.cs" />

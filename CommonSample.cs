@@ -220,14 +220,7 @@ namespace Communifire.RestApiSamples
             }
             Console.Read();
         }
-
-        /// <summary>
-        /// Adds the tags.
-        /// </summary>
-        /// <param name="entityType">Type of the entity.</param>
-        /// <param name="entityID">The entity ID.</param>
-        /// <param name="tags">Tags in comma separated format.</param>
-        /// <param name="spaceID">The space ID.</param>
+        
         public static void AddTags(string tags, int spaceID, string entityType, int entityID)
         {
             try
@@ -366,6 +359,171 @@ namespace Communifire.RestApiSamples
         //        Console.WriteLine(exception.Message);
         //    }
         //}
+
+        public static void GetUserAutoSuggestSearch(string searchText, int numberOfRecords)
+        {
+            try
+            {
+                string serviceUrl = string.Format("{0}commonservice.svc/users/userautosuggest?searchText={1}&numberOfRecords={2}", Program.ROOT_URL, searchText, numberOfRecords);
+                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+                myRequest.Method = "GET";
+                myRequest.ContentType = "application/xml";
+
+                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+                using (var response = myRequest.GetResponse())
+                {
+                    if (response.ContentLength > 0)
+                    {
+                        using (var reader = new StreamReader(response.GetResponseStream()))
+                        {
+                            string result = reader.ReadToEnd();
+                            XmlDocument resultsXml = new XmlDocument();
+                            resultsXml.LoadXml(result);
+                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+                            if (isError)
+                            {
+                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+                                Console.Write(responseMessage);
+                            }
+                            else
+                            {
+                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+                                if (!string.IsNullOrEmpty(serviceResult))
+                                {
+                                    Console.WriteLine("Method successfully called.");
+                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+                                }
+                                else
+                                    Console.WriteLine("Method called but result is not accurate.");
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Failed because: 0 length content returned.");
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
+
+        }
+
+        public static void GetSpaceAutoSuggestSearch(string searchText, int numberOfRecords)
+        {
+            try
+            {
+                string serviceUrl = string.Format("{0}commonservice.svc/spaces/spaceautosuggest?searchText={1}&numberOfRecords={2}", Program.ROOT_URL, searchText, numberOfRecords);
+                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+                myRequest.Method = "GET";
+                myRequest.ContentType = "application/xml";
+
+                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+                using (var response = myRequest.GetResponse())
+                {
+                    if (response.ContentLength > 0)
+                    {
+                        using (var reader = new StreamReader(response.GetResponseStream()))
+                        {
+                            string result = reader.ReadToEnd();
+                            XmlDocument resultsXml = new XmlDocument();
+                            resultsXml.LoadXml(result);
+                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+                            if (isError)
+                            {
+                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+                                Console.Write(responseMessage);
+                            }
+                            else
+                            {
+                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+                                if (!string.IsNullOrEmpty(serviceResult))
+                                {
+                                    Console.WriteLine("Method successfully called.");
+                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+                                }
+                                else
+                                    Console.WriteLine("Method called but result is not accurate.");
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Failed because: 0 length content returned.");
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
+
+        }
+
+        public static void GetActivityTickerResults(int? spaceID, int numberOfRecords)
+        {
+            try
+            {
+                var query = new StringBuilder(string.Format("?numberOfRecords={0}", numberOfRecords));
+
+                if (spaceID != null)
+                {
+                    query.AppendFormat("&spaceID={0}", spaceID);
+                }
+                string serviceUrl = string.Format("{0}commonservice.svc/activity{1}", Program.ROOT_URL, query);
+                var myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
+                myRequest.Method = "GET";
+                myRequest.ContentType = "application/xml";
+
+                myRequest.Headers.Add("Rest-Api-Key", Program.API_KEY);
+
+                using (var response = myRequest.GetResponse())
+                {
+                    if (response.ContentLength > 0)
+                    {
+                        using (var reader = new StreamReader(response.GetResponseStream()))
+                        {
+                            string result = reader.ReadToEnd();
+                            XmlDocument resultsXml = new XmlDocument();
+                            resultsXml.LoadXml(result);
+                            bool isError = Convert.ToBoolean(resultsXml.GetElementsByTagName("IsError")[0].InnerText);
+                            if (isError)
+                            {
+                                string responseMessage = resultsXml.GetElementsByTagName("ResponseMessage")[0].InnerText;
+                                Console.Write(responseMessage);
+                            }
+                            else
+                            {
+                                string serviceResult = resultsXml.GetElementsByTagName("ResponseData")[0].InnerText;
+                                if (!string.IsNullOrEmpty(serviceResult))
+                                {
+                                    Console.WriteLine("Method successfully called.");
+                                    Console.WriteLine(Environment.NewLine + string.Format("Result: {0} ", serviceResult));
+                                }
+                                else
+                                    Console.WriteLine("Method called but result is not accurate.");
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Failed because: 0 length content returned.");
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
+
+        }
 
     }// end class
 }// end namespace
