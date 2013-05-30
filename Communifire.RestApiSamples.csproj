@@ -93,7 +93,7 @@
     <Compile Include="NotificationSample.cs" />
     <Compile Include="RankSample.cs" />
     <Compile Include="RoleSample.cs" />
-    <Compile Include="SpaceProgram.cs" />
+    <Compile Include="SpaceSample.cs" />
     <Compile Include="UserServiceSample.cs" />
     <Compile Include="VideoSample.cs" />
     <Compile Include="WallSample.cs" />
